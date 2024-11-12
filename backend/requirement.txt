@@ -1,0 +1,9 @@
+django
+djangorestframework
+django-cors-headers
+django-environ
+mysqlclient
+pillow
+djangorestframework-simplejwt
+whitenoise
+django-taggit
