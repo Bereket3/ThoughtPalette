@@ -7,3 +7,5 @@ pillow
 djangorestframework-simplejwt
 whitenoise
 django-taggit
+django-stubs
+django-oauth-toolkit

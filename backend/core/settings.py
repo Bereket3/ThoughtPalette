@@ -46,8 +46,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
+    "oauth2_provider",
     "taggit",
     "user",
+    "blog",
 ]
 
 MIDDLEWARE = [
@@ -126,15 +128,26 @@ USE_TZ = True
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 100,
+    "PAGE_SIZE": 50,
+}
+
+OAUTH2_PROVIDER = {
+    "SCOPES": {
+        "read": "Read scope",
+        "write": "Write scope",
+    }
 }
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [BASE_DIR / "staticfiles"]
+
+# media file configuration
+MEDIA_URL = "media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

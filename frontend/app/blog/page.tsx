@@ -1,9 +1,12 @@
+import Hoverable from "@/components/blogComponents/hoverable";
 import { title } from "@/components/primitives";
 
 export default function BlogPage() {
   return (
-    <div>
-      <h1 className={title()}>Blog</h1>
+    <div className="">
+
+      <Hoverable />
+
     </div>
   );
 }

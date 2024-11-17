@@ -5,12 +5,9 @@ from uuid import uuid4
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import AuthUserModel as User
-
 # custom made imports
+from .models import AuthUserModel as User
 from .validate_password import validate_password
-
-# django main imports
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,7 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
         ]
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data: dict):
         """
         It takes in a request and will update the user
 
@@ -45,23 +42,15 @@ class UserSerializer(serializers.ModelSerializer):
         delete it in order not to make multiple files that does't necessarily are
         being used
         """
-        password = None
-        try:
-            password = validated_data["password"]
-        except Exception as _:
-            pass
+        password = validated_data.get("password", None)
+        image = validated_data.get("profile_picture", None)
 
-        try:
-            image = validated_data["profile_picture"]
-            if instance.profile_picture:
-                try:
-                    os.remove(instance.profile_picture.path)
-                except Exception as _:
-                    # file doesn't exist
-                    pass
-        except Exception:
-            # profile picture doesn't exist
-            image = None
+        if instance.profile_picture:
+            try:
+                os.remove(instance.profile_picture.path)
+            except Exception:
+                # the file doesn't exists
+                pass
 
         if image:
             image.name = rename_file(image)
@@ -91,7 +80,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     if there is any error returns response of the error
 
-    ### TODO: make the try catch block more efficient
     """
 
     email = serializers.EmailField(
@@ -134,11 +122,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return attrs
 
-    def create(self, validated_data):
-        try:
-            profile_picture = validated_data["password"]
-        except Exception as _:
-            profile_picture = None
+    def create(self, validated_data: dict):
+
+        profile_picture = validated_data.get("profile_picture", None)
 
         if validated_data["is_staff"]:
             user = User.objects.create_staffuser(
@@ -171,4 +157,3 @@ def rename_file(file):
     name = "".join(name.split())
 
     return name + "-" + str(uuid4())[:10] + extension
-
